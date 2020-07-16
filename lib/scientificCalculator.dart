@@ -1,14 +1,10 @@
-import 'package:math_expressions/math_expressions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:scientific_calculator_open/MathProvider.dart';
 import 'package:scientific_calculator_open/size_config.dart';
+
 import 'constants.dart';
 import 'keyboard.dart';
-
-String firstOperand = '0';
-String secondOperand = '';
-String operators = '';
-String equation = '0';
-String result = '';
 
 class ScientificCalculator extends StatefulWidget {
   @override
@@ -16,115 +12,32 @@ class ScientificCalculator extends StatefulWidget {
 }
 
 class _ScientificCalculatorState extends State<ScientificCalculator> {
-  bool scientificKeyboard = true;
-
   final SizeConfig config = SizeConfig();
 
-  String expression;
-  double equationFontSize;
-  double resultFontSize;
-
-  @override
-  void initState() {
-    super.initState();
-    initialise();
-
-  }
-
-
-  void initialise() {
-    expression = '';
-    equationFontSize = config.sp(27.0);
-    resultFontSize = config.sp(40.0);
-  }
+  MathProvider provider;
 
   void _onPressed({String buttonText}) {
     switch (buttonText) {
       case CLEAR_ALL_SIGN:
-        setState(() {
-          _clear();
-        });
+        provider.clear();
         break;
       case DEL_SIGN:
-        setState(() {
-          equationFontSize = config.sp(27.0);
-          resultFontSize = config.sp(40.0);
-          equation = equation.substring(0, equation.length - 1);
-          if (equation == '') equation = '0';
-        });
+
+        provider.delete();
         break;
       case EQUAL_SIGN:
-        _result();
+        provider.getResult();
         break;
       default:
-        _operands(buttonText);
-    }
-  }
-
-  void _clear() {
-    firstOperand = '0';
-    secondOperand = '';
-    operators = '';
-    equation = '0';
-    result = '';
-    expression = '';
-    equationFontSize = config.sp(27.0);
-    resultFontSize = config.sp(40.0);
-  }
-
-  void _operands(value) {
-    setState(() {
-      equationFontSize = config.sp(40.0);
-      resultFontSize = config.sp(27.0);
-      if (value == POWER_SIGN) value = '^';
-      if (value == MODULAR_SIGN) value = ' mód ';
-      if (value == ARCSIN_SIGN) value = 'arcsin';
-      if (value == ARCCOS_SIGN) value = 'arccos';
-      if (value == ARCTAN_SIGN) value = 'arctan';
-      if (value == DECIMAL_POINT_SIGN) {
-        if (equation[equation.length - 1] == DECIMAL_POINT_SIGN) return;
-      }
-      equation == ZERO ? equation = value : equation += value;
-    });
-  }
-
-  void _result() {
-    setState(() {
-      equationFontSize = config.sp(27.0);
-      resultFontSize = config.sp(40.0);
-      expression = equation;
-      expression = expression.replaceAll('×', '*');
-      expression = expression.replaceAll('÷', '/');
-      expression = expression.replaceAll(PI, '3.1415926535897932');
-      expression = expression.replaceAll(E_NUM, 'e^1');
-      expression = expression.replaceAll(SQUARE_ROOT_SIGN, 'sqrt');
-      expression = expression.replaceAll(POWER_SIGN, '^');
-      expression = expression.replaceAll(ARCSIN_SIGN, 'arcsin');
-      expression = expression.replaceAll(ARCCOS_SIGN, 'arccos');
-      expression = expression.replaceAll(ARCTAN_SIGN, 'arctan');
-      expression = expression.replaceAll(LG_SIGN, 'log');
-      expression = expression.replaceAll(' mód ', MODULAR_SIGN);
-      try {
-        Parser p = Parser();
-        Expression exp = p.parse(expression);
-        ContextModel cm = ContextModel();
-        result = '${exp.evaluate(EvaluationType.REAL, cm)}';
-        if (result == 'NaN') result = CALCULATE_ERROR;
-        _isIntResult();
-      } catch (e) {
-        result = CALCULATE_ERROR;
-      }
-    });
-  }
-
-  _isIntResult() {
-    if (result.toString().endsWith(".0")) {
-      result = int.parse(result.toString().replaceAll(".0", "")).toString();
+        provider.operands(buttonText);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+
+    provider = Provider.of<MathProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -145,9 +58,9 @@ class _ScientificCalculatorState extends State<ScientificCalculator> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              _inOutExpression(equation, equationFontSize),
-                              result != ''
-                                  ? _inOutExpression(result, resultFontSize)
+                              _inOutExpression(provider.equation, provider.equationFontSize),
+                              provider.result != ''
+                                  ? _inOutExpression(provider.result, provider.result)
                                   : Container(),
                             ],
                           ),
