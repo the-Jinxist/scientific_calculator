@@ -12,32 +12,47 @@ class ScientificCalculator extends StatefulWidget {
 }
 
 class _ScientificCalculatorState extends State<ScientificCalculator> {
-  final SizeConfig config = SizeConfig();
 
+  final SizeConfig config = SizeConfig();
   MathProvider provider;
+
+  double equationFontSize;
+  double resultFontSize;
+
+  @override
+  void initState() {
+    equationFontSize = config.sp(40);
+    resultFontSize = config.sp(27);
+    super.initState();
+  }
 
   void _onPressed({String buttonText}) {
     switch (buttonText) {
       case CLEAR_ALL_SIGN:
         provider.clear();
+        setFontSizes();
         break;
       case DEL_SIGN:
-
         provider.delete();
+        setFontSizes();
         break;
       case EQUAL_SIGN:
         provider.getResult();
+        setFontSizes();
         break;
       default:
         provider.operands(buttonText);
+        setFontSizes();
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
 
     provider = Provider.of<MathProvider>(context);
-    provider.initialize();
+//    provider.initialize();
 
     return SafeArea(
       child: Scaffold(
@@ -59,9 +74,9 @@ class _ScientificCalculatorState extends State<ScientificCalculator> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
-                              _inOutExpression(provider.equation, provider.equationFontSize),
+                              _inOutExpression(provider.equation, equationFontSize),
                               provider.result != ''
-                                  ? _inOutExpression(provider.result, provider.resultFontSize)
+                                  ? _inOutExpression(provider.result, resultFontSize)
                                   : Container(),
                             ],
                           ),
@@ -84,6 +99,7 @@ class _ScientificCalculatorState extends State<ScientificCalculator> {
   }
 
   Widget _inOutExpression(text, size) {
+
     return SingleChildScrollView(
       reverse: true,
       scrollDirection: Axis.horizontal,
@@ -93,5 +109,12 @@ class _ScientificCalculatorState extends State<ScientificCalculator> {
         textAlign: TextAlign.end,
       ),
     );
+  }
+
+  void setFontSizes() {
+    setState(() {
+      equationFontSize = provider.equationFontSize;
+      resultFontSize = provider.resultFontSize;
+    });
   }
 }

@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Builder(builder: (context){
         SizeConfig.init(context, width: 360, height: 640, allowFontScaling: true);
+
         return ScientificCalculator();
       },),
     );

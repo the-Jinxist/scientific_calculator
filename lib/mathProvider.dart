@@ -5,6 +5,8 @@ import 'constants.dart';
 
 class MathProvider extends ChangeNotifier{
 
+
+
   SizeConfig config = SizeConfig();
 
   String _firstOperand = '0';
@@ -84,6 +86,8 @@ class MathProvider extends ChangeNotifier{
 
   void delete(){
 
+    config = SizeConfig();
+
     equationFontSize = config.sp(40.0);
     resultFontSize = config.sp(27.0);
     equation = equation.substring(0, equation.length - 1);
@@ -91,6 +95,8 @@ class MathProvider extends ChangeNotifier{
   }
 
   void clear() {
+    config = SizeConfig();
+
     firstOperand = '0';
     secondOperand = '';
     operators = '';
@@ -102,6 +108,8 @@ class MathProvider extends ChangeNotifier{
   }
 
   void operands(value) {
+    config = SizeConfig();
+
       equationFontSize = config.sp(40.0);
       resultFontSize = config.sp(27.0);
       if (value == POWER_SIGN) value = '^';
@@ -115,18 +123,10 @@ class MathProvider extends ChangeNotifier{
       equation == ZERO ? equation = value : equation += value;
   }
 
-  void initialize(){
-    if(!isInitialized){
-      config = SizeConfig();
-      expression = '';
-      equationFontSize = config.sp(27.0);
-      resultFontSize = config.sp(40.0);
-
-      isInitialized = true;
-    }
-  }
 
   void getResult() {
+    config = SizeConfig();
+
       equationFontSize = config.sp(27.0);
       resultFontSize = config.sp(40.0);
       expression = equation;
