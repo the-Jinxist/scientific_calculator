@@ -5,7 +5,7 @@ import 'constants.dart';
 
 class MathProvider extends ChangeNotifier{
 
-  final SizeConfig config = SizeConfig();
+  SizeConfig config = SizeConfig();
 
   String _firstOperand = '0';
   String _secondOperand = '';
@@ -18,7 +18,6 @@ class MathProvider extends ChangeNotifier{
   double _resultFontSize;
 
   bool _isInitialized = false;
-
 
   bool get isInitialized => _isInitialized;
 
@@ -85,8 +84,8 @@ class MathProvider extends ChangeNotifier{
 
   void delete(){
 
-    equationFontSize = config.sp(27.0);
-    resultFontSize = config.sp(40.0);
+    equationFontSize = config.sp(40.0);
+    resultFontSize = config.sp(27.0);
     equation = equation.substring(0, equation.length - 1);
     if (equation == '') equation = '0';
   }
@@ -98,8 +97,8 @@ class MathProvider extends ChangeNotifier{
     equation = '0';
     result = '';
     expression = '';
-    equationFontSize = config.sp(27.0);
-    resultFontSize = config.sp(40.0);
+    equationFontSize = config.sp(40.0);
+    resultFontSize = config.sp(27.0);
   }
 
   void operands(value) {
@@ -116,8 +115,9 @@ class MathProvider extends ChangeNotifier{
       equation == ZERO ? equation = value : equation += value;
   }
 
-  void initialized(){
+  void initialize(){
     if(!isInitialized){
+      config = SizeConfig();
       expression = '';
       equationFontSize = config.sp(27.0);
       resultFontSize = config.sp(40.0);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:scientific_calculator_open/MathProvider.dart';
+import 'package:scientific_calculator_open/mathProvider.dart';
 import 'package:scientific_calculator_open/size_config.dart';
 
 import 'constants.dart';
@@ -37,6 +37,7 @@ class _ScientificCalculatorState extends State<ScientificCalculator> {
   Widget build(BuildContext context) {
 
     provider = Provider.of<MathProvider>(context);
+    provider.initialize();
 
     return SafeArea(
       child: Scaffold(
@@ -60,7 +61,7 @@ class _ScientificCalculatorState extends State<ScientificCalculator> {
                             children: <Widget>[
                               _inOutExpression(provider.equation, provider.equationFontSize),
                               provider.result != ''
-                                  ? _inOutExpression(provider.result, provider.result)
+                                  ? _inOutExpression(provider.result, provider.resultFontSize)
                                   : Container(),
                             ],
                           ),

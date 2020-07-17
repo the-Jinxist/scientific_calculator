@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:scientific_calculator_open/mathProvider.dart';
 import 'package:scientific_calculator_open/scientificCalculator.dart';
 import 'package:scientific_calculator_open/size_config.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider.value(
+      value: MathProvider(),
+      child: MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
